@@ -2,7 +2,7 @@
 
 ## Основная часть
 
-1. Приготовьте свой собственный inventory файл `prod.yml`.
+**1. Приготовьте свой собственный inventory файл `prod.yml`.**
 ```
 dorlov@docker:~/Playbook/playbook$ cat inventory/prod.yml
 ---
@@ -17,7 +17,7 @@ vector:
       ansible_host: 192.168.43.24
 ```
 
-2. Допишите playbook: нужно сделать ещё один play, который устанавливает и настраивает [vector](https://vector.dev).
+**2. Допишите playbook: нужно сделать ещё один play, который устанавливает и настраивает [vector](https://vector.dev).**
 ```
 dorlov@docker:~/AnsiBook/playbook$ cat site.yml
 ---
@@ -98,20 +98,20 @@ dorlov@docker:~/AnsiBook/playbook$ cat site.yml
       tags: vector
 ```
 
-3. При создании tasks рекомендую использовать модули: `get_url`, `template`, `unarchive`, `file`.
-4. Tasks должны: скачать нужной версии дистрибутив, выполнить распаковку в выбранную директорию, установить vector.
+**3. При создании tasks рекомендую использовать модули: `get_url`, `template`, `unarchive`, `file`.**
+**4. Tasks должны: скачать нужной версии дистрибутив, выполнить распаковку в выбранную директорию, установить vector.**
 
 **3** и **4**.
 Использолвал только *get_url*
 Нашел инструкцию, где происходит скачивание репы и установка пакета с использованием yum: https://vector.dev/docs/setup/installation/package-managers/yum/
 
-5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.
+**5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.**
 ```
 dorlov@docker:~/Playbook/playbook$ ansible-lint site.yml
 dorlov@docker:~/Playbook/playbook$
 ```
 
-6. Попробуйте запустить playbook на этом окружении с флагом `--check`.
+**6. Попробуйте запустить playbook на этом окружении с флагом `--check`.**
 ```
 dorlov@docker:~/AnsiBook/playbook$ ansible-playbook -i inventory/prod.yml site.yml --check -K
 BECOME password:
@@ -136,7 +136,7 @@ PLAY RECAP *********************************************************************
 clickhouse-01              : ok=2    changed=1    unreachable=0    failed=1    skipped=0    rescued=1    ignored=0
 ```
 
-7. Запустите playbook на `prod.yml` окружении с флагом `--diff`. Убедитесь, что изменения на системе произведены.
+**7. Запустите playbook на `prod.yml` окружении с флагом `--diff`. Убедитесь, что изменения на системе произведены.**
 ```
 dorlov@docker:~/AnsiBook/playbook$ ansible-playbook -i inventory/prod.yml site.yml --diff -K
 BECOME password:
@@ -185,7 +185,7 @@ clickhouse-01              : ok=5    changed=2    unreachable=0    failed=0    s
 vector-01                  : ok=5    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
 
-8. Повторно запустите playbook с флагом `--diff` и убедитесь, что playbook идемпотентен.
+**8. Повторно запустите playbook с флагом `--diff` и убедитесь, что playbook идемпотентен.**
 ```
 dorlov@docker:~/AnsiBook/playbook$ ansible-playbook -i inventory/prod.yml site.yml --diff -K
 BECOME password:
@@ -227,7 +227,6 @@ PLAY RECAP *********************************************************************
 clickhouse-01              : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=1    ignored=0
 vector-01                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 ```
-9. Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
-[README](https://github.com/Borodatko/AnsiBook/blob/0bfe15d51fa9b5416c5f015b32c6779aa6be7423/playbook/README.md)
+**9. Подготовьте README.md файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.**
 
-10. Готовый playbook выложите в свой репозиторий, поставьте тег `08-ansible-02-playbook` на фиксирующий коммит, в ответ предоставьте ссылку на него.
+[README](https://github.com/Borodatko/AnsiBook/blob/0bfe15d51fa9b5416c5f015b32c6779aa6be7423/playbook/README.md)
