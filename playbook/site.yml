@@ -1,0 +1,76 @@
+---
+- name: Install Clickhouse
+  hosts: clickhouse
+  handlers:
+    - name: Start clickhouse service
+      become: true
+      ansible.builtin.systemd:
+        name: clickhouse-server
+        enabled: yes
+        masked: no
+        state: started
+  tasks:
+    - block:
+        - name: Clickhouse - Get distrib
+          ansible.builtin.get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.noarch.rpm"
+            dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
+          with_items: "{{ clickhouse_packages }}"
+      rescue:
+        - name: Clickhouse - Get distrib
+          ansible.builtin.get_url:
+            url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
+            dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+      tags: clickhouse
+    - name: Clickhouse - Install packages
+      become: true
+      ansible.builtin.yum:
+        name:
+          - clickhouse-common-static-{{ clickhouse_version }}.rpm
+          - clickhouse-client-{{ clickhouse_version }}.rpm
+          - clickhouse-server-{{ clickhouse_version }}.rpm
+      notify: Start clickhouse service
+      tags: clickhouse
+
+    - name: Clickhouse - Flush handlers
+      ansible.builtin.meta: flush_handlers
+      tags: clickhouse
+
+    - name: Clickhouse - Create database
+      ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
+      register: create_db
+      failed_when: create_db.rc != 0 and create_db.rc !=82
+      changed_when: create_db.rc == 0
+      tags: clickhouse
+
+- name: Install Vector
+  hosts: vector
+  handlers:
+    - name: Start vector service
+      become: true
+      ansible.builtin.systemd:
+        name: vector
+        enabled: yes
+        masked: no
+        state: started
+  tasks:
+    - name: Vector - Download repo
+      ansible.builtin.get_url:
+        url: https://repositories.timber.io/public/vector/cfg/setup/bash.rpm.sh
+        dest: /tmp/bash.rpm.sh
+        mode: '0755'
+      tags: vector
+
+    - name: Vector - Install repo
+      become: true
+      ansible.builtin.command: "/tmp/bash.rpm.sh"
+      changed_when: false
+      tags: vector
+
+    - name: Vector - Install package
+      become: true
+      ansible.builtin.yum:
+        name: vector
+        state: latest
+      notify: Start vector service
+      tags: vector
