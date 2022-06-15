@@ -1,3 +1,5 @@
+## VARS
+
 clickhouse_version - версия Clickhouse
 
 clickhouse_packages - пакеты Clickhouse:
