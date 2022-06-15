@@ -1,4 +1,5 @@
 clickhouse_version - версия Clickhouse
+
 clickhouse_packages - пакеты Clickhouse:
   - clickhouse-client
   - clickhouse-server
