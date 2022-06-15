@@ -102,7 +102,8 @@ dorlov@docker:~/AnsiBook/playbook$ cat site.yml
 **4. Tasks должны: скачать нужной версии дистрибутив, выполнить распаковку в выбранную директорию, установить vector.**
 
 **3** и **4**.
-Использолвал только *get_url*
+Использолвал только *get_url*.
+
 Нашел инструкцию, где происходит скачивание репы и установка пакета с использованием yum: https://vector.dev/docs/setup/installation/package-managers/yum/
 
 **5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.**
